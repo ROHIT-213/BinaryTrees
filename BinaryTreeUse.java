@@ -1,8 +1,25 @@
 package BinaryTrees;
 
 public class BinaryTreeUse {
+    public static void PrintTreeDetailed(BinaryTreeNode<Integer> root){
+        //base case
+        if(root == null){
+            return;
+        }
+        System.out.print(root.data + " : ");
+        if(root.left!= null){
+            System.out.print("L"+root.left.data + ", ");
+        }
+        if(root.right != null){
+            System.out.print("R"+root.right.data);
+        }
+        System.out.println();
+
+        PrintTreeDetailed(root.left);
+        PrintTreeDetailed(root.right);
+    }
     //now let's create a print function to print our tree
-    public static void PrintTree(BinaryTreeNode<Integer> root){
+    /*public static void PrintTree(BinaryTreeNode<Integer> root){
         //base case
         if(root == null){
             return;
@@ -10,7 +27,7 @@ public class BinaryTreeUse {
         System.out.println(root.data);
         PrintTree(root.left);
         PrintTree(root.right);
-    }
+    }*/
     public static void main(String[] args) {
         //created node with data as 1
         BinaryTreeNode<Integer> root = new BinaryTreeNode<Integer>(1); // these uses constructor that we added if we don't add we have to create root node and set it's data as root.data = 1; in next line
@@ -29,6 +46,7 @@ public class BinaryTreeUse {
         rootLeft.right = tworight;
         rootRight.left = threeLeft;
 
-        PrintTree(root);
+        //PrintTree(root);
+        PrintTreeDetailed(root);
     }
 }
