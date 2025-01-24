@@ -1,29 +1,32 @@
 package BinaryTrees;
-//import java.Math;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
-import queues.QueueEmptyException;
 
-public class RemoveLeafNode {
-    public static BinaryTreeNode<Integer>removeLeaves(BinaryTreeNode<Integer> root){
+import queues.QueueEmptyException;
+import java.util.*;
+
+public class BalancedBinaryTree {
+    public static int Height(BinaryTreeNode<Integer> root){
         if(root == null){
-            return null;
+            return 0;
         }
-        if(root.left == null && root.right == null){
-            return null;
-        }
-        //removeLeaves(root.left);
-        //removeLeaves(root.right);
-        /*The above commented code(in line 16 & 17) will not remove leaf node it will only return null value to root(dry run it)
-         * to remove we have to update root's left and right node means if we write root.left = removeLeaves(root.left)
-         * than as function is called if leaf node does not have left and right node than according to code at line 13
-         * it will return null and root.left will get updated to null so once it is updated to null means ur leaf node is removed
-         */
-        root.left = removeLeaves(root.left);
-        root.right = removeLeaves(root.right);
-        return root;  //return root because the root is still the same 
+        int leftheight = Height(root.left);
+        int rightHeight = Height(root.right);
+        return 1+ Math.max(leftheight,rightHeight);
     }
+    public static boolean isBalanced(BinaryTreeNode<Integer> root){
+        if(root == null){
+            return true;
+        }
+        int leftHeight = Height(root.left);
+        int rightHeight = Height(root.right);
+        if(Math.abs(leftHeight-rightHeight)>1){
+            return false;
+        }
+        boolean isLeftBalanced = isBalanced(root.left);
+        boolean isRightBalanced = isBalanced(root.right);
+
+        return isLeftBalanced && isRightBalanced;
+    }
+
     public static BinaryTreeNode<Integer> TakeInputLevelWise()throws QueueEmptyException{
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Root data: ");
@@ -80,14 +83,13 @@ public class RemoveLeafNode {
         PrintTreeDetailed(root.left);
         PrintTreeDetailed(root.right);
     }
+
     public static void main(String[] args) throws QueueEmptyException {
         BinaryTreeNode<Integer> root = TakeInputLevelWise();
         System.out.println();
         System.out.println("The Binary Tree you entered is as follow: ");
         PrintTreeDetailed(root);
         System.out.println();
-        System.out.println("The Binary tree after removing leaf node is as follow: ");
-        BinaryTreeNode<Integer> newRoot = removeLeaves(root);
-        PrintTreeDetailed(newRoot);
+        System.out.println("your Binary Tree is balanced (True/False) : "+ isBalanced(root));
     }
 }

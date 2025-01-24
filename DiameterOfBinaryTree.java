@@ -1,28 +1,37 @@
 package BinaryTrees;
-//import java.Math;
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
-import queues.QueueEmptyException;
 
-public class RemoveLeafNode {
-    public static BinaryTreeNode<Integer>removeLeaves(BinaryTreeNode<Integer> root){
+import queues.QueueEmptyException;
+/*Problem statement
+Asked in companies like paytm and Acko
+
+For a given Binary of type integer, find and return the ‘Diameter’.
+
+Diameter of a Tree
+The diameter of a tree can be defined as the maximum distance between two leaf nodes.
+Here, the distance is measured in terms of the total number of nodes present along the path of the two leaf nodes, including both the leaves. */
+public class DiameterOfBinaryTree {
+    public static int height(BinaryTreeNode<Integer> root){
         if(root == null){
-            return null;
+            return 0;
         }
-        if(root.left == null && root.right == null){
-            return null;
+        int Leftheight = height(root.left);
+        int Rightheight = height(root.right);
+        return 1+Math.max(Leftheight, Rightheight);
+    }
+    public static int diameterofBinaryTree(BinaryTreeNode<Integer> root){
+        //base case if tree is empty than tree's diameter is 0
+        if(root == null){
+            return 0;
         }
-        //removeLeaves(root.left);
-        //removeLeaves(root.right);
-        /*The above commented code(in line 16 & 17) will not remove leaf node it will only return null value to root(dry run it)
-         * to remove we have to update root's left and right node means if we write root.left = removeLeaves(root.left)
-         * than as function is called if leaf node does not have left and right node than according to code at line 13
-         * it will return null and root.left will get updated to null so once it is updated to null means ur leaf node is removed
-         */
-        root.left = removeLeaves(root.left);
-        root.right = removeLeaves(root.right);
-        return root;  //return root because the root is still the same 
+        //calculate diameter consedering all three possibilities
+        int DiameterThroughRoot = 1+height(root.left)+height(root.right);
+        int DiameterInLeftSubtree = diameterofBinaryTree(root.left);
+        int DiameterInRightSubtree = diameterofBinaryTree(root.right);
+        return Math.max(Math.max(DiameterInLeftSubtree, DiameterInRightSubtree),DiameterThroughRoot);
     }
     public static BinaryTreeNode<Integer> TakeInputLevelWise()throws QueueEmptyException{
         Scanner sc = new Scanner(System.in);
@@ -82,12 +91,11 @@ public class RemoveLeafNode {
     }
     public static void main(String[] args) throws QueueEmptyException {
         BinaryTreeNode<Integer> root = TakeInputLevelWise();
+        int d = diameterofBinaryTree(root);
         System.out.println();
         System.out.println("The Binary Tree you entered is as follow: ");
         PrintTreeDetailed(root);
         System.out.println();
-        System.out.println("The Binary tree after removing leaf node is as follow: ");
-        BinaryTreeNode<Integer> newRoot = removeLeaves(root);
-        PrintTreeDetailed(newRoot);
+        System.out.println("Diameter is: " + d);
     }
 }

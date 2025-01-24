@@ -1,29 +1,35 @@
 package BinaryTrees;
-//import java.Math;
+/*
+ * Problem statement (Easy)
+For a given a Binary Tree of type integer, duplicate every node of the tree and attach it to the left of itself.
+
+The root will remain the same. So you just need to insert nodes in the given Binary Tree.
+
+ */
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
+
 import queues.QueueEmptyException;
 
-public class RemoveLeafNode {
-    public static BinaryTreeNode<Integer>removeLeaves(BinaryTreeNode<Integer> root){
+public class CreateAndInsertDuplicateNode {
+    public static void insertDuplicateNode(BinaryTreeNode<Integer> root){
         if(root == null){
-            return null;
+            return;
         }
-        if(root.left == null && root.right == null){
-            return null;
-        }
-        //removeLeaves(root.left);
-        //removeLeaves(root.right);
-        /*The above commented code(in line 16 & 17) will not remove leaf node it will only return null value to root(dry run it)
-         * to remove we have to update root's left and right node means if we write root.left = removeLeaves(root.left)
-         * than as function is called if leaf node does not have left and right node than according to code at line 13
-         * it will return null and root.left will get updated to null so once it is updated to null means ur leaf node is removed
-         */
-        root.left = removeLeaves(root.left);
-        root.right = removeLeaves(root.right);
-        return root;  //return root because the root is still the same 
+        BinaryTreeNode<Integer> OriginalLeft = root.left;
+        //create a duplicate node to attach in left of the current node
+        BinaryTreeNode<Integer> Duplicate = new BinaryTreeNode<Integer> (root.data);
+        root.left = Duplicate;
+        //Attach original left node to Duplicate's left node 
+        Duplicate.left = OriginalLeft;
+
+        insertDuplicateNode(OriginalLeft);
+        insertDuplicateNode(root.right);
     }
+
+    
     public static BinaryTreeNode<Integer> TakeInputLevelWise()throws QueueEmptyException{
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Root data: ");
@@ -63,6 +69,7 @@ public class RemoveLeafNode {
         }
         return root;
     }
+
     public static void PrintTreeDetailed(BinaryTreeNode<Integer> root){
         //base case
         if(root == null){
@@ -83,11 +90,12 @@ public class RemoveLeafNode {
     public static void main(String[] args) throws QueueEmptyException {
         BinaryTreeNode<Integer> root = TakeInputLevelWise();
         System.out.println();
-        System.out.println("The Binary Tree you entered is as follow: ");
+        System.out.println("Binary tree entered by you:- ");
         PrintTreeDetailed(root);
         System.out.println();
-        System.out.println("The Binary tree after removing leaf node is as follow: ");
-        BinaryTreeNode<Integer> newRoot = removeLeaves(root);
-        PrintTreeDetailed(newRoot);
+        insertDuplicateNode(root);
+        System.out.println();
+        System.out.println("Binary Tree With Duplicate Node is as follow:- ");
+        PrintTreeDetailed(root);
     }
 }
